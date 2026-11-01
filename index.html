@@ -2,7 +2,10 @@
 <html lang="es">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"
+    />
     <meta name="theme-color" content="#10121b" />
     <title>La Botonera — el timing lo es todo</title>
     <link rel="stylesheet" href="style.css" />
@@ -99,7 +102,9 @@
                   value="0:00"
                   placeholder="0:00"
                   required
-                  inputmode="decimal" /></label
+                  inputmode="numeric"
+                  autocomplete="off"
+                  aria-describedby="time-hint" /></label
               ><label
                 >Fin<input
                   id="end"
@@ -107,12 +112,14 @@
                   value="0:05"
                   placeholder="0:05"
                   required
-                  inputmode="decimal"
+                  inputmode="numeric"
+                  autocomplete="off"
+                  aria-describedby="time-hint"
               /></label>
             </div>
-            <p class="hint">
-              Usá minutos:segundos (1:24) o segundos (84). El final debe ser
-              posterior al inicio.
+            <p id="time-hint" class="hint">
+              Escribí solo números: 123 se convierte en 1:23. Los segundos van
+              de 00 a 59 y el final debe ser posterior al inicio.
             </p>
             <label
               >Color del botón<input id="color" type="color" value="#b8a1ff"
@@ -127,7 +134,7 @@
                 ▶ Escuchar fragmento</button
               ><button type="submit" class="button primary">
                 Guardar botón</button
-              ><button type="button" id="reset" class="button subtle">
+              ><button type="button" id="cancel-edit" class="button subtle">
                 Cancelar
               </button>
             </div>

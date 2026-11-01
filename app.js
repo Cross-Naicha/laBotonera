@@ -69,9 +69,19 @@ function readForm() { return validate({videoId:videoId($('url').value),name:$('n
 function resetForm() { $('sound-form').reset(); $('edit-id').value = ''; $('form-title').textContent = 'Nuevo botón'; updatePreview(); }
 function editSound(s) { $('edit-id').value = s.id; $('url').value = `https://www.youtube.com/watch?v=${s.videoId}`; for(const key of ['name','color']) $(key).value = s[key]; $('start').value = format(s.start); $('end').value = format(s.end); $('form-title').textContent = 'Editar botón'; updatePreview(); switchView('edit'); $('url').focus(); }
 function updatePreview() { $('preview-name').textContent = $('name').value.trim() || 'Tu próximo clásico'; $('preview-time').textContent = `${$('start').value} → ${$('end').value}`; $('button-preview').style.setProperty('--sound',$('color').value); }
-['name','start','end','color'].forEach(id => $(id).addEventListener('input',updatePreview));
+['name','color'].forEach(id => $(id).addEventListener('input',updatePreview));
+['start','end'].forEach(id => {
+  const input = $(id);
+  input.addEventListener('focus', () => input.select());
+  input.addEventListener('input', () => {
+    const digits = input.value.replace(/\D/g, '').replace(/^0+/, '').padStart(3, '0');
+    input.value = `${digits.slice(0, -2)}:${digits.slice(-2)}`;
+    input.setSelectionRange(input.value.length, input.value.length);
+    updatePreview();
+  });
+});
 colors.forEach(c => { const b = document.createElement('button'); b.type = 'button'; b.className = 'swatch'; b.style.setProperty('--swatch',c); b.setAttribute('aria-label',`Usar color ${c}`); b.onclick = () => { $('color').value = c; updatePreview(); }; $('swatches').append(b); });
-$('reset').onclick = resetForm;
+$('cancel-edit').onclick = resetForm;
 $('sound-form').onsubmit = event => { event.preventDefault(); try { const data = readForm(); const id = $('edit-id').value || uid(); const next = sounds.some(s => s.id === id) ? sounds.map(s => s.id === id ? {...data,id} : s) : [...sounds,{...data,id}]; if(persist(next)) { resetForm(); notice('Botón guardado en este navegador.'); switchView('play'); } } catch(e) { notice(e.message); } };
 $('preview').onclick = () => { try { play({...readForm(),id:null}); } catch(e) { notice(e.message); } };
 function stop() { pending = null; currentClip = null; clearInterval(timer); timer = null; if(playerReady) player.stopVideo(); activeId = null; $('now-playing').textContent = 'Todavía no suena nada'; $('player-status').textContent = 'Reproducción detenida.'; render(); }
