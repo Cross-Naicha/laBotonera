@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#10121b" />
+    <title>La Botonera — el timing lo es todo</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="#" aria-label="La Botonera, inicio"
+        ><span class="brand-icon">▦</span> la botonera<span class="brand-dot"
+          >.</span
+        ></a
+      ><span class="local-badge"><i></i> Tu colección, en este navegador</span>
+    </header>
+    <main>
+      <section class="intro">
+        <div class="eyebrow">PARA EL MOMENTO JUSTO</div>
+        <h1>Un botón.<br />Mil chistes internos<span>.</span></h1>
+        <p>
+          Los audios de siempre. El timing de ustedes.<br />Armá tu colección
+          con fragmentos de YouTube.
+        </p>
+      </section>
+      <nav aria-label="Secciones">
+        <button class="tab active" data-view="play" aria-selected="true">
+          ▶ <span>Reproducir</span></button
+        ><button class="tab" data-view="edit" aria-selected="false">
+          ✎ <span>Editar</span></button
+        ><button class="tab" data-view="share" aria-selected="false">
+          ↗ <span>Compartir</span>
+        </button>
+      </nav>
+      <div id="notice" role="status" hidden></div>
+      <section id="play" class="view">
+        <div class="section-heading">
+          <div>
+            <h2>Tu repertorio <span id="count" class="count">0</span></h2>
+            <p>Tocá un botón y dejá que hable por vos.</p>
+          </div>
+          <button id="add-first" class="button primary">
+            + Agregar sonido
+          </button>
+        </div>
+        <label class="search"
+          ><span>⌕</span
+          ><input
+            id="search"
+            type="search"
+            placeholder="Buscar ese sonido…"
+            aria-label="Buscar sonidos"
+        /></label>
+        <div id="sound-grid" class="sound-grid"></div>
+        <div id="empty" class="empty">
+          <div class="empty-icon">♫</div>
+          <h3>Acá empieza el lore del grupo</h3>
+          <p>
+            Agregá tu primer enlace de YouTube y convertí<br />ese momento en un
+            botón.
+          </p>
+          <button id="empty-add" class="button primary">
+            + Crear mi primer botón
+          </button>
+        </div>
+      </section>
+      <section id="edit" class="view" hidden>
+        <div class="section-heading">
+          <div>
+            <h2>El taller de sonidos</h2>
+            <p>Encontrá el fragmento. Dale un nombre. Hacelo tuyo.</p>
+          </div>
+        </div>
+        <div class="editor-layout">
+          <form id="sound-form" class="panel">
+            <h3 id="form-title">Nuevo botón</h3>
+            <input id="edit-id" type="hidden" />
+            <label
+              >Enlace de YouTube<input
+                id="url"
+                type="url"
+                placeholder="https://www.youtube.com/watch?v=…"
+                required
+            /></label>
+            <label
+              >Nombre del botón<input
+                id="name"
+                maxlength="60"
+                placeholder="Ej. No era por ahí"
+                required
+            /></label>
+            <div class="time-fields">
+              <label
+                >Inicio<input
+                  id="start"
+                  type="text"
+                  value="0:00"
+                  placeholder="0:00"
+                  required
+                  inputmode="decimal" /></label
+              ><label
+                >Fin<input
+                  id="end"
+                  type="text"
+                  value="0:05"
+                  placeholder="0:05"
+                  required
+                  inputmode="decimal"
+              /></label>
+            </div>
+            <p class="hint">
+              Usá minutos:segundos (1:24) o segundos (84). El final debe ser
+              posterior al inicio.
+            </p>
+            <label
+              >Color del botón<input id="color" type="color" value="#b8a1ff"
+            /></label>
+            <div
+              id="swatches"
+              class="swatches"
+              aria-label="Colores sugeridos"
+            ></div>
+            <div class="form-actions">
+              <button type="button" id="preview" class="button">
+                ▶ Escuchar fragmento</button
+              ><button type="submit" class="button primary">
+                Guardar botón</button
+              ><button type="button" id="reset" class="button subtle">
+                Cancelar
+              </button>
+            </div>
+          </form>
+          <aside>
+            <div class="panel preview-panel">
+              <div class="eyebrow">ASÍ VA A QUEDAR</div>
+              <div id="button-preview" class="sound-card sample">
+                <span class="play-icon">▶</span
+                ><strong id="preview-name">Tu próximo clásico</strong
+                ><span id="preview-time">0:00 → 0:05</span>
+              </div>
+              <p class="hint">
+                Guardado en tu navegador. Sin cuentas, sin vueltas.
+              </p>
+            </div>
+            <div class="panel collection">
+              <h3>Tus botones</h3>
+              <div id="edit-list"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <section id="share" class="view" hidden>
+        <div class="section-heading">
+          <div>
+            <h2>Pasá el chiste</h2>
+            <p>Un enlace, un fragmento y alguien más que lo entiende.</p>
+          </div>
+        </div>
+        <div id="incoming" class="panel" hidden>
+          <div class="eyebrow">TE COMPARTIERON UN SONIDO</div>
+          <h3 id="incoming-name"></h3>
+          <p id="incoming-info"></p>
+          <div class="form-actions">
+            <button id="incoming-play" class="button">▶ Escuchar</button
+            ><button id="incoming-save" class="button primary">
+              + Agregar a mi botonera
+            </button>
+          </div>
+        </div>
+        <div class="panel share-panel">
+          <label
+            >Elegí un botón<select id="share-select">
+              <option value="">Seleccioná un sonido…</option>
+            </select></label
+          >
+          <p id="share-details" class="hint">
+            Se comparten el video, los tiempos, el nombre y el color.
+          </p>
+          <label
+            >Enlace para compartir<textarea
+              id="share-link"
+              rows="3"
+              readonly
+              placeholder="Tu enlace aparecerá acá"
+            ></textarea></label
+          ><button id="copy" class="button primary" disabled>
+            ↗ Copiar enlace
+          </button>
+          <p class="hint">
+            Compartí este enlace desde la app publicada para que tus amigos
+            puedan escuchar el fragmento y agregarlo a su propia botonera.
+          </p>
+        </div>
+        <div class="panel backup">
+          <div>
+            <h3>Tu colección también viaja</h3>
+            <p class="hint">
+              Exportá una copia para guardar un respaldo o llevar tus botones a
+              otro navegador.
+            </p>
+          </div>
+          <div class="form-actions">
+            <button id="export" class="button">↓ Exportar colección</button
+            ><label class="button import-label"
+              >↑ Importar colección<input
+                id="import"
+                type="file"
+                accept="application/json,.json"
+                hidden
+            /></label>
+          </div>
+        </div>
+      </section>
+      <section class="player-panel" aria-label="Reproductor">
+        <div class="player-heading">
+          <div>
+            <span class="eyebrow">EN EL AIRE</span>
+            <h3 id="now-playing">Todavía no suena nada</h3>
+            <p id="player-status">Elegí un botón para empezar.</p>
+          </div>
+          <button id="stop" class="button stop">■ Parar</button>
+        </div>
+        <div id="youtube-player"></div>
+        <p class="hint">
+          YouTube necesita internet. Algunos videos no permiten reproducirse
+          fuera de YouTube.
+        </p>
+      </section>
+    </main>
+    <footer>
+      <span>Hecho para compartir el momento.</span
+      ><span
+        >Los botones quedan en este navegador · Exportá para tener un
+        respaldo.</span
+      >
+    </footer>
+  </body>
+</html>
